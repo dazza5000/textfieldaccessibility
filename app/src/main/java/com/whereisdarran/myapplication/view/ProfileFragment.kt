@@ -38,12 +38,10 @@ class ProfileFragment : Fragment() {
 fun TextInputLayout.showError(
     showError: Boolean = true
 ) {
-
     this.isErrorEnabled = false
     if (showError) {
         this.editText?.requestFocus()
         this.error = "this field has an error"
         this.isErrorEnabled = true
     }
-
 }
