@@ -55,9 +55,6 @@ class MainActivity : ComponentActivity() {
 
                         ) {
                             TextFieldSample(
-                                modifier = Modifier.semantics(mergeDescendants = true) {
-                                    if (isError.value) liveRegion = LiveRegionMode.Polite
-                                },
                                 value = value.value,
                                 onValueChange = {
                                                 value.value = it
@@ -70,7 +67,6 @@ class MainActivity : ComponentActivity() {
                                 onValueChange = {
                                     value.value = it
                                 },
-                                errorMessage = error.value,
                                 label = "text field test two"
                             )
                             TextFieldSample(
@@ -78,7 +74,6 @@ class MainActivity : ComponentActivity() {
                                 onValueChange = {
                                     value.value = it
                                 },
-                                errorMessage = error.value,
                                 label = "text field test three"
                             )
                         }
