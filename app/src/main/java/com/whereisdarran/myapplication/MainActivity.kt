@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.whereisdarran.myapplication
 
 import android.os.Bundle
@@ -17,44 +15,13 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.fragment.app.FragmentActivity
 import com.whereisdarran.myapplication.ui.theme.MyApplicationTheme
 
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-
-            var error = remember { mutableStateOf("") }
-            var isError = remember { mutableStateOf(false) }
-            var value = remember { mutableStateOf(TextFieldValue("")) }
-
-            MyApplicationTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    Column() {
-                        OutlinedTextField(
-                            value.value,
-                            modifier = Modifier.semantics {
-                                if (isError.value) liveRegion = LiveRegionMode.Polite
-                            },
-                            onValueChange = {},
-                            isError = isError.value,
-                            supportingText = {
-                                if (isError.value) Text(text = error.value) else null
-                            })
-                        Button({
-                            isError.value = !isError.value
-                            error.value = if (isError.value) "we got errorz" else ""
-                        }) {
-                            Text("Button")
-                        }
-                    }
-                }
-            }
-        }
+        setContentView(R.layout.activity_main)
     }
 }
 
