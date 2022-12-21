@@ -22,10 +22,7 @@ import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.liveRegion
-import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
@@ -54,23 +51,24 @@ class MainActivity : ComponentActivity() {
                         Column(
 
                         ) {
-                            TextFieldSample(
+                            OutlinedTextField(
                                 value = value.value,
-                                onValueChange = {
-                                                value.value = it
-                                },
-                                errorMessage = error.value,
-                                label = "text field test"
+                                { value.value = it },
+//                                modifier = Modifier.semantics(mergeDescendants = true) {
+//                                    if (isError.value) liveRegion = LiveRegionMode.Polite
+//                                },
+                                isError = isError.value,
+                                label =  { if (isError.value) Text(error.value) else null }
                             )
                             TextFieldSample(
-                                value = value.value,
+                                value = TextFieldValue(""),
                                 onValueChange = {
                                     value.value = it
                                 },
                                 label = "text field test two"
                             )
                             TextFieldSample(
-                                value = value.value,
+                                value = TextFieldValue(""),
                                 onValueChange = {
                                     value.value = it
                                 },
