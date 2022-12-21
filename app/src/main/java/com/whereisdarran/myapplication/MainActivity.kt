@@ -37,10 +37,12 @@ class MainActivity : ComponentActivity() {
                     Column() {
                         OutlinedTextField(
                             value.value,
-                            modifier = Modifier.semantics {
-                                if (isError.value) liveRegion = LiveRegionMode.Polite
+                            modifier = Modifier.semantics(mergeDescendants = true) {
+//                                if (isError.value) liveRegion = LiveRegionMode.Polite
                             },
-                            onValueChange = {},
+                            onValueChange = {
+                                            value.value = it
+                            },
                             isError = isError.value,
                             supportingText = {
                                 if (isError.value) Text(text = error.value) else null
