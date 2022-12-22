@@ -12,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
@@ -27,6 +29,7 @@ class MainActivity : ComponentActivity() {
             var error = remember { mutableStateOf("") }
             var isError = remember { mutableStateOf(false) }
             var value = remember { mutableStateOf(TextFieldValue("")) }
+            var focusRequester = remember { FocusRequester() }
 
             MyApplicationTheme {
                 // A surface container using the 'background' color from the theme
@@ -37,9 +40,9 @@ class MainActivity : ComponentActivity() {
                     Column() {
                         OutlinedTextField(
                             value.value,
-                            modifier = Modifier.semantics(mergeDescendants = true) {
-//                                if (isError.value) liveRegion = LiveRegionMode.Polite
-                            },
+                            modifier = Modifier.semantics {
+                                if (isError.value) liveRegion = LiveRegionMode.Polite
+                            }.focusRequester(focusRequester),
                             onValueChange = {
                                             value.value = it
                             },
@@ -55,6 +58,10 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
+
+
+                    if (isError.value) focusRequester.requestFocus()
+
             }
         }
     }
