@@ -12,6 +12,9 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Close
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -22,6 +25,8 @@ import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.*
 import androidx.compose.ui.text.TextRange
 import androidx.compose.ui.text.TextStyle
@@ -30,7 +35,11 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.whereisdarran.myapplication.ui.LoadingDialog
 import com.whereisdarran.myapplication.ui.theme.MyApplicationTheme
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,54 +48,65 @@ class MainActivity : ComponentActivity() {
 
             val error = remember { mutableStateOf("") }
             val isError = remember { mutableStateOf(false) }
+            val isLoading = remember { mutableStateOf(false) }
             val value = remember { mutableStateOf(TextFieldValue("")) }
 
             MyApplicationTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Column() {
-                        Column(
-
-                        ) {
-                            OutlinedTextField(
-                                value = value.value,
-                                { value.value = it },
-//                                modifier = Modifier.semantics(mergeDescendants = true) {
-//                                    if (isError.value) liveRegion = LiveRegionMode.Polite
-//                                },
-                                isError = isError.value,
-                                label =  { if (isError.value) Text(error.value) else null }
-                            )
-                            TextFieldSample(
-                                value = TextFieldValue(""),
-                                onValueChange = {
-                                    value.value = it
-                                },
-                                label = "text field test two"
-                            )
-                            TextFieldSample(
-                                value = TextFieldValue(""),
-                                onValueChange = {
-                                    value.value = it
-                                },
-                                label = "text field test three"
-                            )
-                        }
+                Scaffold(
+                    bottomBar = {
                         Button({
-                            isError.value = !isError.value
-                            error.value = if (isError.value) "please complete this field" else ""
+                            isLoading.value = true
+
+                            GlobalScope.launch {
+                                delay(500L)
+                                isError.value = !isError.value
+                                error.value =
+                                    if (isError.value) "please complete this field" else ""
+
+                                isLoading.value = false
+                            }
                         }) {
                             Text("Button")
                         }
                     }
+                ) {
+                    Column(modifier = Modifier.padding(it)) {
+                        LoadingDialog(showLoadingDialog = isLoading.value)
+
+                        OutlinedTextField(
+                            value = value.value,
+                            { value.value = it },
+//                            modifier = Modifier.semantics(mergeDescendants = true) {
+//                                liveRegion = LiveRegionMode.Polite
+//                            },
+                            isError = isError.value,
+                        )
+                        TextFieldSample(
+                                                        modifier = Modifier.semantics(mergeDescendants = true) {
+                                liveRegion = LiveRegionMode.Polite
+                            },
+                            value = TextFieldValue(""),
+                            onValueChange = {
+                                value.value = it
+                            },
+                            label = if (isError.value) (error.value) else ""
+                        )
+                        TextFieldSample(
+                            value = TextFieldValue(""),
+                            onValueChange = {
+                                value.value = it
+                            },
+                            label = "text field test three"
+                        )
+
+                    }
                 }
+            }
             }
         }
     }
-}
+
 
 @Composable
 fun Greeting(name: String) {
