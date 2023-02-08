@@ -37,9 +37,6 @@ class MainActivity : ComponentActivity() {
                     Column() {
                         OutlinedTextField(
                             value.value,
-                            modifier = Modifier.semantics(mergeDescendants = true) {
-//                                if (isError.value) liveRegion = LiveRegionMode.Polite
-                            },
                             onValueChange = {
                                             value.value = it
                             },
