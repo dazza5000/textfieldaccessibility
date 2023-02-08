@@ -60,6 +60,7 @@ class MainActivity : ComponentActivity() {
                         if (error.value.isNotBlank()) {
                                 Text(
                                     text = error.value,
+                                    style = MaterialTheme.typography.error,
                                     modifier = Modifier
                                         .padding(top = 2.dp, start = 16.dp)
                                         .semantics {
@@ -93,3 +94,6 @@ fun DefaultPreview() {
     }
 }
 
+val Typography.error: TextStyle
+    @Composable
+    get() = MaterialTheme.typography.caption.copy(color = MaterialTheme.colors.error)
