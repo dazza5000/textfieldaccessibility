@@ -27,7 +27,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         with(_viewBinding!!) {
             saveButton.setOnClickListener {
-                error = true
+                error = !error
                 firstNameInputLayout.showError(error)
             }
         }
@@ -40,5 +40,7 @@ fun TextInputLayout.showError(
 ) {
     if (showError) {
         this.error = "this field has an error"
+    } else {
+        this.error = null
     }
 }
