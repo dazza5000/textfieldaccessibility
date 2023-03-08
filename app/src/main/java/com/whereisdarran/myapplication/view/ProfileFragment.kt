@@ -38,6 +38,8 @@ class ProfileFragment : Fragment() {
                     val dialog = AlertUtil.getLoadingDialog(this@ProfileFragment.requireActivity())
                     dialog.show()
 
+                    delay(500L)
+
                     dialog.dismiss()
 
 
