@@ -1,39 +1,62 @@
 package com.whereisdarran.myapplication
 
+import android.content.Context
 import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.semantics.LiveRegionMode
-import androidx.compose.ui.semantics.liveRegion
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
+import android.view.LayoutInflater
+import android.widget.Button
 import androidx.fragment.app.FragmentActivity
-import com.whereisdarran.myapplication.ui.theme.MyApplicationTheme
+import androidx.lifecycle.lifecycleScope
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputLayout
+import com.whereisdarran.myapplication.databinding.ViewLoadingBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class MainActivity : FragmentActivity() {
+
+    private var error: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
         setContentView(R.layout.activity_main)
+
+        findViewById<Button>(R.id.saveButton).setOnClickListener {
+            lifecycleScope.launch {
+                val dialog = AlertUtil.getLoadingDialog(this@MainActivity)
+                dialog.show()
+
+                delay(500L)
+
+                dialog.dismiss()
+
+
+                error = !error
+
+
+                findViewById<TextInputLayout>(R.id.firstNameInputLayout).showError(error)
+            }
+        }
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    MyApplicationTheme {
-        Greeting("Android")
+fun TextInputLayout.showError(
+    showError: Boolean = true
+) {
+    if (showError) {
+        this.error = "this field has an error"
+    } else {
+        this.error = null
     }
 }
+
+object AlertUtil {
+    fun getLoadingDialog(context: Context): androidx.appcompat.app.AlertDialog {
+        val view = ViewLoadingBinding.inflate(LayoutInflater.from(context))
+        val dialog =
+            MaterialAlertDialogBuilder(context).setView(view.root).setCancelable(false).create()
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        return dialog
+    }
+}
+
