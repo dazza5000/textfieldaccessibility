@@ -12,10 +12,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Close
-
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -25,10 +21,9 @@ import androidx.compose.ui.autofill.AutofillType
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.takeOrElse
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.*
-import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
@@ -83,7 +78,7 @@ class MainActivity : ComponentActivity() {
                             isError = isError.value,
                         )
                         TextFieldSample(
-                                                        modifier = Modifier.semantics(mergeDescendants = true) {
+                            modifier = Modifier.semantics(mergeDescendants = true) {
                                 liveRegion = LiveRegionMode.Polite
                             },
                             value = TextFieldValue(""),
@@ -103,9 +98,9 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-            }
         }
     }
+}
 
 
 @Composable
@@ -148,7 +143,9 @@ fun TextFieldSample(
     }
     val mergedTextStyle = textStyle.merge(TextStyle(color = textColor))
     // https://issuetracker.google.com/issues/251162419
-    val contentDesc = if (hideLabel || placeholder != null) { label } else null
+    val contentDesc = if (hideLabel || placeholder != null) {
+        label
+    } else null
     Column(
         modifier = modifier
             .width(IntrinsicSize.Min)
@@ -192,7 +189,9 @@ fun TextFieldSample(
                     value,
                     innerTextField,
                     placeholder,
-                    if (hideLabel) null else { { Text(text = label) } },
+                    if (hideLabel) null else {
+                        { Text(text = label) }
+                    },
                     trailingIcon,
                     lines,
                     enabled,
