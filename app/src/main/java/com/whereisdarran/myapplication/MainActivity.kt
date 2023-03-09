@@ -23,12 +23,12 @@ class MainActivity : FragmentActivity() {
 
         findViewById<Button>(R.id.saveButton).setOnClickListener {
             lifecycleScope.launch {
-                val dialog = AlertUtil.getLoadingDialog(this@MainActivity)
-                dialog.show()
+//                val dialog = AlertUtil.getLoadingDialog(this@MainActivity)
+//                dialog.show()
 
                 delay(500L)
 
-                dialog.dismiss()
+//                dialog.dismiss()
 
 
                 error = !error
