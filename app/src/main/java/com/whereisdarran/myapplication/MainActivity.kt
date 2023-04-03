@@ -2,6 +2,7 @@ package com.whereisdarran.myapplication
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import androidx.fragment.app.FragmentActivity
@@ -23,12 +24,12 @@ class MainActivity : FragmentActivity() {
 
         findViewById<Button>(R.id.saveButton).setOnClickListener {
             lifecycleScope.launch {
-//                val dialog = AlertUtil.getLoadingDialog(this@MainActivity)
-//                dialog.show()
+                val dialog = AlertUtil.getLoadingDialog(this@MainActivity)
+                dialog.show()
 
-                delay(500L)
+                delay(1500L)
 
-//                dialog.dismiss()
+                dialog.dismiss()
 
 
                 error = !error
@@ -54,7 +55,12 @@ object AlertUtil {
     fun getLoadingDialog(context: Context): androidx.appcompat.app.AlertDialog {
         val view = ViewLoadingBinding.inflate(LayoutInflater.from(context))
         val dialog =
-            MaterialAlertDialogBuilder(context).setView(view.root).setCancelable(false).create()
+            MaterialAlertDialogBuilder(context).setView(view.root)
+                .setOnDismissListener {
+                    Log.e("darrantalkback","talkback dialog dismissed")
+                }
+                .setCancelable(false)
+                .create()
         dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
         return dialog
     }
